@@ -1,0 +1,105 @@
+{% extends 'home.html' %} {% load static %} {% block style %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+<style>
+  .videos__container {
+    margin-left: 5%;
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(300px, 1fr)
+    ); /* Create responsive grid */
+    gap: 25px; /* Add space between the grid items */
+  }
+
+  .video {
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .video__player {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .video__details {
+    padding: 10px;
+  }
+
+  .video__details .author img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .video__details .title h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .video__details .title small {
+    color: #777;
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="mainBody">
+  {% include 'sidebar.html' %}
+
+  <!-- Video Section Starts -->
+  <div class="videos">
+    <div class="drop-down-container">
+      <h1 style="font-size: 20px; margin-left: 4rem">Recommended</h1>
+    </div>
+
+    <div class="videos__container">
+      <!-- Single Video Starts Here -->
+      {% for v in video %}
+      <div class="video">
+        <div class="video__player">
+          {% if v.video %}
+          <video controls style="object-fit: cover; width: 100%; height: auto">
+            <source src="{{ v.video.url }}" type="video/mp4" />
+          </video>
+          {% else %}
+          <p>No video available.</p>
+          {% endif %}
+        </div>
+
+        <div class="video__details">
+          <div class="author">
+            {% if v.user.channel.image %}
+            <a href="{% url 'channel-profile' v.user.channel.id %}">
+              <img src="{{ v.user.channel.image.url }}" alt="" />
+            </a>
+            {% else %}
+            <a href="{% url 'channel-profile' v.user.channel.id %}">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/1053/1053244.png?w=360"
+                alt=""
+              />
+            </a>
+            {% endif %}
+          </div>
+          <div class="title">
+            <a href="{% url 'video-detail' v.id %}">
+              <h3>{{ v.title|truncatechars:34 }}</h3>
+            </a>
+            <a href="{% url 'channel-profile' v.user.channel.id %}"></a>
+            <span>
+              <small
+                >{{ v.views }} View{{ v.views|pluralize }} . {{ v.date|timesince
+                }} ago</small
+              >
+            </span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
