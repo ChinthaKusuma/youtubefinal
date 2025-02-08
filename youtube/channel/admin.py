@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from channel.models import Channel, Community, CommunityComment
 from import_export.admin import ImportExportModelAdmin
-
+app_name="channel"
 class ChannelAdmin(ImportExportModelAdmin):
     list_display = ["channel_name", "user" ,"status"]
 

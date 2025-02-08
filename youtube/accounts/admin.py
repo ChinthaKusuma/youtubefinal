@@ -8,13 +8,13 @@
 # admin.site.register(User)
 from django.contrib import admin
 
-from accounts.models import Profile
-from import_export.admin import ImportExportModelAdmin
+# from accounts.models import Profile
+# from import_export.admin import ImportExportModelAdmin
 
 
 
-class ProfileAdmin(ImportExportModelAdmin):
-    list_display = ['user']
+# class ProfileAdmin(ImportExportModelAdmin):
+#     list_display = ['user']
 
 
-admin.site.register(Profile, ProfileAdmin)
+# admin.site.register(Profile, ProfileAdmin)

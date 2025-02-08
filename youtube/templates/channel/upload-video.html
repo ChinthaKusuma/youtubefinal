@@ -1,6 +1,10 @@
 {% extends 'home.html' %}
 {% load static %}
-{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">{% endblock style %}
+{% block style %} <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css"><style>
+    .videos{
+        margin-left:20%;
+    }
+</style>{% endblock style %}
 
 {% block content %}
 
@@ -38,7 +42,7 @@
                     </div>
                     
                     <div class="tags-div">
-                        <span>Tags (optional) </span> <br>
+                        <span>Tags  </span> <br>
                         <!-- <input type="text" > -->
                         {{form.tags}}
                         <p>Seperate Tags with Comma</p>
@@ -82,24 +86,10 @@
                         
                     </div>
                     <div class="upload-btn-div">
-                        <button type="submit" class="upload-btn">Publish</button>
+                        <button type="submit" class="upload-btn">ADD VIDEO</button>
                     </div>
                 </div>
-                <div class="right-video">
-                    <div class="r-thumb">
-                        <div class="uploading-video">
-                            <h5>Uploading Video...</h5>
-                        </div>
-                        <!-- <img src="images/logo.jpg" alt=""> -->
-                        <div class="video-details">
-                                <h5>Video Links</h5>
-                                <a href="">https://youtu.be/Bgstu6u&4</a>
-                            
-                                <h4>Filename</h4>
-                                <span >Video File name here</span>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </form>
         

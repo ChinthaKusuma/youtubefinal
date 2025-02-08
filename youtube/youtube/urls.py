@@ -23,10 +23,16 @@ from . import views
 
 urlpatterns = [
     # path('',views.home,name='home'),
+   
+    
     path("", include("videos.urls")),
+
+
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-     path("channel/", include("channel.urls")),
+    path("channel/", include("channel.urls")), 
+    
 ]
 if settings.DEBUG:  # Only serve media in development
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

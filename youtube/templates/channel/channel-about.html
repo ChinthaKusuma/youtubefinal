@@ -1,14 +1,14 @@
 {% extends 'home.html' %} {% load static %} {% block style %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />{%
-endblock style %} {% block content %}
-
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+{% endblock %} {% block content %}
 <div class="mainBody">
-  {% include 'partials/sidebar.html' %}
+  {% include 'sidebar.html' %}
 
   <!-- Video Section Starts -->
   <div class="videos">
     {% include 'channel/partials/channel-header.html' %}
-    <div class="conteent-border">
+
+    <div class="content-border">
       <div class="about-div">
         <div class="about-left">
           <h3>Description</h3>
@@ -19,14 +19,14 @@ endblock style %} {% block content %}
               <h4>Details</h4>
             </div>
 
-            {% if channel.make_business_email_public == True %}
+            {% if channel.make_business_email_public %}
             <div class="about-biz">
-              <h3><small>For business enquiry:</small></h3>
+              <h3><small>For business enquiries:</small></h3>
               <h3 class="left-h4">
                 <small>{{ channel.business_email }}</small>
               </h3>
             </div>
-            {% endif %} {% if channel.make_business_location_public == True %}
+            {% endif %} {% if channel.make_business_location_public %}
             <div class="about-biz">
               <h3><small>Business location:</small></h3>
               <h3 class="left-h4">
@@ -35,26 +35,33 @@ endblock style %} {% block content %}
             </div>
             {% endif %}
           </div>
+
           <hr />
           <div class="links">
             <h4>Links</h4>
 
             <div class="links-content">
-              <a href="{{channel.website}}">Website</a> <br /><br />
-              <a href="{{channel.facebook}}">Facebook</a> <br /><br />
-              <a href="{{channel.instgram}}">Instagram</a> <br /><br />
-              <a href="{{channel.twitter}}">Twitter</a>
+              {% if channel.website %}
+              <a href="{{ channel.website }}">Website</a> <br /><br />
+              {% endif %} {% if channel.facebook %}
+              <a href="{{ channel.facebook }}">Facebook</a> <br /><br />
+              {% endif %} {% if channel.instagram %}
+              <a href="{{ channel.instagram }}">Instagram</a> <br /><br />
+              {% endif %} {% if channel.twitter %}
+              <a href="{{ channel.twitter }}">Twitter</a>
+              {% endif %}
             </div>
           </div>
         </div>
+
         <div class="about-right">
           <h4><b>Stats</b></h4>
           <hr />
           <div class="stats">
-            <h5>{{channel.joined|date:"M d, Y"}}</h5>
+            <h5>Joined: {{ channel.joined|date:"M d, Y" }}</h5>
             <hr />
             <h5>
-              {{channel.total_views}} View{{channel.total_views|pluralize}}
+              {{ channel.total_views }} View{{ channel.total_views|pluralize }}
             </h5>
             <hr />
             <h5>
@@ -64,10 +71,11 @@ endblock style %} {% block content %}
         </div>
       </div>
     </div>
+
     <div class="videos__container">
       <!-- Single Video Starts Here -->
     </div>
   </div>
 </div>
 
-{% endblock content %}
+{% endblock %}

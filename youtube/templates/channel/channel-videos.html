@@ -1,14 +1,12 @@
 {% extends 'home.html' %} {% load static %} {% block style %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />{%
-endblock style %} {% block content %}
-
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+{% endblock %} {% block content %}
 <div class="mainBody">
-  {% include 'partials/sidebar.html' %}
+  {% include 'sidebar.html' %}
 
   <!-- Video Section Starts -->
   <div class="videos">
     {% include 'channel/partials/channel-header.html' %}
-
     <br />
     <div class="popular-video flex">
       <h3>All Videos</h3>
@@ -20,8 +18,8 @@ endblock style %} {% block content %}
       <div class="video">
         <div class="video__thumbnail">
           {% if v.image %}
-          <a href="{% url 'video-detail' v.id %}"
-            ><img src="{{v.image.url}}" alt=""
+          <a href="{% url 'videos:video-detail' v.id %}"
+            ><img src="{{ v.image.url }}" alt=""
           /></a>
           {% else %}
           <a href="{% url 'video-detail' v.id %}"
@@ -46,15 +44,14 @@ endblock style %} {% block content %}
             {% endif %}
           </div>
           <div class="title">
-            <a href="{% url 'video-detail' v.id %}"
-              ><h3>{{v.title|truncatechars:34}}</h3></a
+            <a href="{% url 'videos:video-detail' v.id %}"
+              ><h3>{{ v.title|truncatechars:34 }}</h3></a
             >
             <a href="{% url 'channel-profile' v.user.channel.id %}"
               ><small
-                >{{v.user.channel.channel_name}} {% if v.user.channel.verified
-                == True %} <i class="fas fa-check-circle"></i> {% endif %}
-              </small></a
-            >
+                >{{ v.user.channel.channel_name }} {% if v.user.channel.verified
+                == True %} <i class="fas fa-check-circle"></i> </small
+            ></a>
             <span
               ><small
                 >{{ v.views }} View{{ v.views|pluralize }} . {{ v.date|timesince
@@ -69,4 +66,4 @@ endblock style %} {% block content %}
   </div>
 </div>
 
-{% endblock content %}
+{% endblock %}

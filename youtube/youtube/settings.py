@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'taggit',
     'channel',
     'import_export',
+    'useradmin'
 ]
 
 MIDDLEWARE = [

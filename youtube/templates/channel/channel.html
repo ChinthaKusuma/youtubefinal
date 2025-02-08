@@ -1,90 +1,65 @@
 {% extends 'home.html' %} {% load static %} {% block style %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />{%
-endblock style %} {% block content %}
-
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+{% endblock style %} {% block content %}
 <div class="mainBody">
-  {% include 'partials/sidebar.html' %}
+  {% include 'sidebar.html' %}
 
   <!-- Video Section Starts -->
   <div class="videos">
-    {% include 'channel/partials/channel-header.html' %} {% if video_featured !=
-    None %}
-    <div class="channel-intro-video">
-      <div class="intro-video">
-        <video controls>
-          <source src="{{ video_featured.video.url }}" type="video/mp4" />
-        </video>
-      </div>
-      <div class="intro-contents">
-        <h3>{{video_featured.title|truncatechars:100}}</h3>
-        <small class="small"
-          >{{video_featured.views}} view{{video_featured.views|pluralize}} -
-          {{video_featured.date|timesince}} ago</small
-        >
-        <p>{{ video_featured.description|truncatechars:100 }}</p>
+    {% include 'channel/partials/channel-header.html' %}
 
-        <small>Read More</small>
-      </div>
-    </div>
-    {% endif %}
-
-    <hr />
-    <br />
     <div class="popular-video flex">
-      <h3>Popular uploads</h3>
-      <div class="flex play-all">
-        <i class="material-icons">play_arrow</i>
-        <a href="">Play All</a>
-      </div>
+      <h3>Video uploads</h3>
     </div>
+
     <br />
+
     <div class="videos__container">
-      <!-- Single Video Starts Here -->
       {% for v in videos %}
       <div class="video">
         <div class="video__thumbnail">
-          {% if v.image %}
-          <a href="{% url 'video-detail' v.id %}"
-            ><img src="{{v.image.url}}" alt=""
-          /></a>
-          {% else %}
-          <a href="{% url 'video-detail' v.id %}"
-            ><img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrf0lpB42PwkxZCIvkgPjzFbA4SMYVhjyVLDdrC5_OLJEAI4GCqBfknjVqIeqQXvHuX9A&usqp=CAU"
-              alt=""
-          /></a>
-          {% endif %}
+          <a href="{% url 'videos:video-detail' v.id %}">
+            {% if v.image %}
+            <img src="{{ v.image.url }}" alt="Thumbnail" />
+            {% else %}
+            <img
+              src="{% static 'images/default-thumbnail.jpg' %}"
+              alt="Default Thumbnail"
+            />
+            {% endif %}
+          </a>
         </div>
         <div class="video__details">
           <div class="author">
-            {% if v.user.channel.image %}
-            <a href="{% url 'channel-profile' v.user.channel.id %}"
-              ><img src="{{ v.user.channel.image.url }}" alt=""
-            /></a>
-            {% else %}
-            <a href="{% url 'channel-profile' v.user.channel.id %}"
-              ><img
-                src="https://cdn-icons-png.flaticon.com/512/1053/1053244.png?w=360"
-                alt=""
-            /></a>
-            {% endif %}
+            <a href="{% url 'channel-profile' v.user.channel.id %}">
+              {% if v.user.channel.image %}
+              <img src="{{ v.user.channel.image.url }}" alt="Channel Logo" />
+              {% else %}
+              <img
+                src="{% static 'images/default-channel.png' %}"
+                alt="Default Channel"
+              />
+              {% endif %}
+            </a>
           </div>
           <div class="title">
-            <a href="{% url 'video-detail' v.id %}"
-              ><h3>{{v.title|truncatechars:34}}</h3></a
-            >
-            <a href="{% url 'channel-profile' v.user.channel.id %}"
-              ><small
-                >{{v.user.channel.channel_name}} {% if v.user.channel.verified
-                == True %} <i class="fas fa-check-circle"></i> {% endif %}
-              </small></a
-            >
-            <span
-              ><small
-                >{{ v.views }} View{{ v.views|pluralize }} . {{ v.date|timesince
-                }} ago</small
-              ></span
-            >
+            <a href="{% url 'videos:video-detail' v.id %}">
+              <h3>{{ v.title|truncatechars:34 }}</h3>
+            </a>
+            <a href="{% url 'channel-profile' v.user.channel.id %}">
+              <small>
+                {{ v.user.channel.channel_name }}
+                <div>
+                  {% if v.user.channel.verified %}
+                  <i class="fas fa-check-circle"></i>
+                  {% endif %}
+                </div>
+              </small>
+            </a>
+            <span>
+              <small> {{ v.views }} View ago</small>
+              <small>{{ v.views|pluralize }} . {{ v.date|timesince}} </small>
+            </span>
           </div>
         </div>
       </div>
@@ -92,5 +67,49 @@ endblock style %} {% block content %}
     </div>
   </div>
 </div>
+
+<!-- JavaScript for Read More -->
+<script>
+  function toggleReadMore(element) {
+    let description = element.previousElementSibling;
+    if (description.classList.contains("expanded")) {
+      description.classList.remove("expanded");
+      element.innerText = "Read More";
+    } else {
+      description.classList.add("expanded");
+      element.innerText = "Show Less";
+    }
+  }
+</script>
+
+<style>
+  .video-description {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 400px;
+    display: inline-block;
+  }
+
+  .video-description.expanded {
+    white-space: normal;
+    overflow: visible;
+  }
+
+  .read-more {
+    cursor: pointer;
+    color: blue;
+  }
+  .videos__container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 videos per row */
+    gap: 20px;
+    margin-top: 20px;
+    align-items: start;
+  }
+  .mainBody {
+    margin-left: 5%;
+  }
+</style>
 
 {% endblock content %}

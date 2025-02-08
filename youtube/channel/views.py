@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from channel.models import Channel, Community, CommunityComment
-from videos.models import Video
+from videos.models import Video,Comment
+from channel.models import Channel
+from .forms import ChannelForm
+
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -9,7 +12,7 @@ from channel.forms import VideoForm, CommunityForm
 
 
 def channel_profile(request, channel_name):
-    channel = get_object_or_404(Channel, id=channel_name)
+    channel = get_object_or_404(Channel, id=int(channel_name))
 
     # Getting Popular Videos
     videos = Video.objects.filter(user=channel.user, visibility="public").order_by("-views")
@@ -113,24 +116,7 @@ def like_community_post(request, community_id):
     
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
-@login_required
-def video_upload(request):
-    user = request.user
-    if request.method == "POST":
-        form = VideoForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_form = form.save(commit=False)
-            new_form.user = user
-            new_form.save()
-            form.save_m2m()
-            messages.success(request, f"Video Uploaded Successfully.")
-            return redirect("studio")
-    else:
-        form = VideoForm()
-    context = {
-        "form":form,
-    }
-    return render(request, "channel/upload-video.html", context)
+
 
 
 
@@ -149,7 +135,7 @@ def video_edit(request, channel_id, video_id):
             new_form.save()
             form.save_m2m()
             messages.success(request, f"Video Edited Successfully.")
-            return redirect("studio")
+            return redirect("/")
     else:
         form = VideoForm(instance=video)
     context = {
@@ -166,7 +152,7 @@ def video_delete(request, video_id):
 
     if request.user == video.user:
         video.delete()
-        return redirect("studio")
+        return redirect("/")
     else:
         return HttpResponse("You are not allowed to delete this video")
 
@@ -224,3 +210,63 @@ def delete_comm_post(request, channel_id, post_id):
 
     post.delete()
     return redirect("channel-community", channel.id)
+
+@login_required
+def studio(request,channel_id):
+    user = request.user
+    channel = user.channel
+
+    channel = Channel.objects.get(user=user)
+    videos = Video.objects.filter(user=user)
+    comments = Comment.objects.filter()
+
+    context = {
+        "user":user,
+        "channel":channel,
+        "videos":videos,
+    }
+
+    return render(request, "channel/studio.html", context)
+
+
+def Video_delete(request, vid):
+    user = request.user
+    video = Video.objects.get(id=vid, user=user)
+    video.delete()
+    return redirect("/")
+@login_required
+def video_upload(request):
+    user = request.user
+    if request.method == "POST":
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_form = form.save(commit=False)
+            new_form.user = user
+            new_form.save()
+            form.save_m2m()
+            messages.success(request, f"Video Uploaded Successfully.")
+            return redirect("/")
+    else:
+        form = VideoForm()
+    context = {
+        "form":form,
+    }
+    return render(request, "channel/upload-video.html", context)
+    
+@login_required
+def create_channel(request):
+    
+    if request.method=="POST":
+        form = ChannelForm(request.POST, request.FILES)
+        if form.is_valid():
+            channel = form.save(commit=False)
+            channel.user = request.user  # Assign the current user
+            channel.save()
+            return redirect("channel/channel.html", pk=channel.pk) 
+    else:
+        form = ChannelForm()
+    context = {
+        "form":form,
+    }
+
+    return render(request, "channel/create-channel.html", context)

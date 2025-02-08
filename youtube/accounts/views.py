@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login # Import Django's built-in login function
+from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout  # Import Django's built-in login function
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import RegistrationForm
 from django.contrib.auth.models import User
-from .models import Profile
+
 
 def register(request):
     if request.method == "POST":
@@ -24,13 +24,13 @@ def login(request):  # Keeping the name "login"
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)  # Use Django's login function with the alias
-            return redirect('index')  # Redirect to home page after login
+            return redirect('videos:index')  # Redirect to home page after login
     else:
         form = AuthenticationForm()
     
     return render(request, 'login.html', {'form': form})
 
 def logout(request):
-    logout(request)
-    return redirect("login")
+    auth_logout(request)
+    return redirect("accounts:login")
 

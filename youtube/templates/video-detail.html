@@ -5,24 +5,222 @@
 {% endblock style %} {% block content %}
 
 <style>
-  .fa {
-    color: black;
-  }
-  a {
-    color: black;
-  }
-  #channel-tag {
-    color: blue;
-  }
-  .unsubscribe-btn {
-    background-color: gray;
-    color: #fff;
-  }
-</style>
+  /* General Styles */
+ 
 
+  
+    
+  /* Light Mode General Styles */
+body {
+  font-family: "Roboto", Arial, sans-serif;
+  background-color: #ffffff; /* White background */
+  color: #000000; /* Black text */
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover {
+  color: #065fd4;
+}
+
+.fa {
+  color: black;
+}
+
+/* Centered Main Layout */
+.single_pages {
+  display: flex;
+  flex-direction: column; /* Stack video and comments */
+  align-items: center;
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 5%;
+}
+
+/* Video Player */
+video {
+  width: 100%;
+  max-height: 500px;
+  border-radius: 12px;
+  background: black;
+}
+
+/* Video Details Section */
+.left_content {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+}
+
+/* Video Actions */
+.view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.icon button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: black;
+}
+
+.icon button.active {
+  color: #065fd4;
+}
+
+.icon button.active1 {
+  color: red;
+}
+
+/* Channel Details */
+.details {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.details .img img {
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+}
+
+.details h4 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.details .fa-check-circle {
+  color: #065fd4;
+  margin-left: 5px;
+}
+
+/* Subscribe Button */
+.subscribe-btn {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+  border: none;
+}
+
+.subscribe-btn:hover {
+  background-color: #c00;
+}
+
+.unsubscribe-btn {
+  background-color: gray;
+  color: white;
+}
+
+/* Comments Section */
+.comment {
+  width: 100%;
+  background: #f1f1f1;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.comment h4 {
+  margin-bottom: 10px;
+  color: black;
+}
+
+#comment_form {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+#comment_form input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: white;
+  color: black;
+}
+
+#comment_form button {
+  background-color: #065fd4;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#comment_form button:hover {
+  background-color: #004cbf;
+}
+
+/* Individual Comments */
+.comment-tray {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.comment-tray .details_Comment {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comment-tray img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.comment-tray .heading h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: black;
+}
+
+.comment-tray p {
+  color: #333;
+}
+
+/* Delete Button */
+.comment-like button {
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+.video-page{
+  display: flex;
+  flex-direction: column;
+}
+  
+</style>
+<div class="video-page">
 <main class="single_pages">
   <section class="video_items flex">
-    <h1>one</h1>
     <div class="left">
       <div class="left_content">
         <video controls style="object-fit: cover">
@@ -33,7 +231,7 @@
         <div class="tag">
           <label for="" class="tags">
             {% for tag in video.tags.all %}
-            <a id="channel-tag" href="{% url 'tags' tag.slug %}"
+            <a id="channel-tag" href="{% url 'videos:tags' tag.slug %}"
               >#{{tag.name}}</a
             >
             {% endfor %}
@@ -48,17 +246,18 @@
 
           <div class="flex">
             <div class="icon">
-              <button id="like-button" onclick="addlike()">
-                <i class="fa fa-thumbs-up"></i>
+              <button id="like-button">
+                
+                <i class="fas fa-thumbs-up"></i>
               </button>
-              <label
-                ><span id="like-count">{{ video.likes.count }}</span></label
-              >
+              <label><span id="like-count">{{ video.likes.count }}</span></label>
             </div>
+            
 
             <div class="icon">
-              <button id="dislike-button" onclick="adddislike()">
-                <i class="fa fa-thumbs-down"></i>
+              <button id="dislike-button">
+                
+                <i class="fas fa-thumbs-down"></i>
               </button>
               <label
                 ><span id="dislike-count"
@@ -68,7 +267,7 @@
             </div>
 
             <div class="icon">
-              <a href="{% url 'save-video' video.id %}">
+              <a>
                 <i class="fa fa-bookmark"></i>
                 <label>Save</label>
               </a>
@@ -92,72 +291,179 @@
           </div>
           <div class="heading">
             <h4>
-              {{ video.user.channel.channel_name }} {% if
-              video.user.channel.verified %}
+              {{ video.user.channel.channel_name }} 
+              <div>
+              {% if video.user.channel.verified %}
               <small><i class="fa fa-check-circle"></i></small>
-              {% endif %}
             </h4>
             <span id="sub-count"
               >{{ video.user.channel.subscribers.count }}</span
             >
             Subscribers
+            {% endif %}
+             </div>
           </div>
           <div>
             <button
               id="sub_btn"
-              onclick="toggleSubscription()"
+             
               class="subscribe-btn"
             >
               Subscribe
             </button>
           </div>
         </div>
+        <div>
+          <div class="comment">
+            <h4><b>{{ comments.count }} Comments</b></h4>
+            
+           <!-- Comment Form -->
+<form method="post" action="{% url 'videos:add_comment' video.id %}">
+  {% csrf_token %}
+  <textarea name="comment" placeholder="Write a comment..." required></textarea>
+  <button type="submit">Post Comment</button>
+</form>
 
-        <div class="comment">
-          <h4><b>{{ comments.count }} Comments</b></h4>
-          {% if request.user.is_authenticated %}
-          <form id="comment_form">
-            {% csrf_token %}
-            <input type="hidden" value="{{ video.id }}" id="video-id" />
-            <input
-              type="text"
-              placeholder="Add a comment..."
-              id="comment-text"
-            />
-            <button type="submit">Submit</button>
+<!-- Display Comments -->
+{% for comment in video.comments.all %}
+  {% if comment.is_parent %}  {# Only show top-level comments #}
+      <div class="comment" style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd;">
+          <strong>{{ comment.channel.channel_name }}</strong>
+          <p>{{ comment.comment }}</p>
+
+          <!-- Reply Form -->
+          <form method="post" action="{% url 'videos:add_reply' comment.id %}">
+              {% csrf_token %}
+              <textarea name="comment" placeholder="Reply..." required></textarea>
+              <button type="submit">Reply</button>
           </form>
-          {% else %}
-          <a href="{% url 'sign-in' %}">Login To Comment</a>
-          {% endif %}
-        </div>
+
+          <!-- Nested Replies -->
+          {% for reply in comment.children %}
+              <div style="margin-left: 30px; border-left: 2px solid #ddd; padding-left: 10px; margin-top: 5px;">
+                  <strong>{{ reply.channel.channel_name }}</strong>
+                  <p>{{ reply.comment }}</p>
+
+                  <!-- Reply Form for Nested Replies -->
+                  <form method="post" action="{% url 'videos:add_reply' reply.id %}">
+                      {% csrf_token %}
+                      <textarea name="comment" placeholder="Reply..." required></textarea>
+                      <button type="submit">Reply</button>
+                  </form>
+
+                  <!-- Show deeper nested replies -->
+                  {% for sub_reply in reply.children %}
+                      <div style="margin-left: 30px; border-left: 2px solid #ccc; padding-left: 10px; margin-top: 5px;">
+                          <strong>{{ sub_reply.channel.channel_name }}</strong>
+                          <p>{{ sub_reply.comment }}</p>
+
+                          <!-- Reply Form for Sub Replies -->
+                          <form method="post" action="{% url 'videos:add_reply' sub_reply.id %}">
+                              {% csrf_token %}
+                              <textarea name="comment" placeholder="Reply..." required></textarea>
+                              <button type="submit">Reply</button>
+                          </form>
+                      </div>
+                  {% endfor %}
+              </div>
+          {% endfor %}
+      </div>
+  {% endif %}
+{% endfor %}
+
+          </div>
+          
       </div>
     </div>
-  </section>
+    
+      <hr class="mid-hr">
+
+  
+
+     
+</div>
+
+
+               
+
+               
+</section>
 </main>
-
+</div>
 <script>
-  function addlike() {
-    fetch("{% url 'add_like' video.id %}")
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("like-count").innerText = data.likes;
-      });
-  }
+  document.addEventListener("DOMContentLoaded", function () {
+    let likeCounter = document.getElementById("like-count");
+    let likeButton = document.getElementById("like-button");
+    let disLikeButton=document.getElementById("dislike-button");
 
-  function adddislike() {
-    fetch("{% url 'add_dislike' video.id %}")
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("dislike-count").innerText = data.dislikes;
-      });
-  }
+    function addLike() {
+        likeButton.classList.toggle('active')
+        fetch("{% url 'videos:add_new_like' video.id %}") // Updated URL path
+            .then(response => response.json())
+            .then(data => {
+                likeButton.innerHTML = data;
+               
+                loadLikes();
+                
+            })
+            .catch(error => console.error("Error:", error));
+    }
 
-  function toggleSubscription() {
-    fetch("{% url 'toggle_subscription' video.user.id %}")
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("sub-count").innerText = data.subscribers;
-      });
-  }
+    function loadLikes() {
+        fetch("{% url 'videos:load_video_likes' video.id %}") // Updated view
+            .then(response => response.json())
+            .then(data => {
+                likeCounter.innerText = data.length;
+            })
+            .catch(error => console.error("Error:", error));
+    }
+    function disLike(){
+      disLikeButton.classList.toggle('active1')
+    }
+
+    likeButton.addEventListener("click", addLike);
+    disLikeButton.addEventListener('click',disLike);
+   
+    loadLikes(); // Load likes when page loads
+  });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".reply-form").forEach(form => {
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();  // Prevent page refresh
+            
+            let formData = new FormData(this);
+            let commentId = this.dataset.commentId;
+            let url = `/comment/reply/${commentId}/`;  // Update this to match your Django URL
+            
+            fetch(url, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.reply_id) {
+                    let newReply = document.createElement("div");
+                    newReply.classList.add("reply");
+                    newReply.innerHTML = `
+                        <p><strong>${data.channel_name}</strong>: ${formData.get("comment")}</p>
+                    `;
+                    document.querySelector(`#comment-${commentId} .replies`).appendChild(newReply);
+                    this.reset();  // Clear the input field
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+});
+
+
+</script>
+  
 {% endblock content %}
+
+
